@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/03 18:58:58 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/03 19:45:43 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,20 @@ void quit(t_game *game)
 }
 
 
-void	draw_map(t_map *map, t_game *game)
+void	draw_map(t_game *game)
 {
 	int	x;
 	int	y;
 
 	y = 0;
-	while (y < map->height)
+	while (y < game->map->height)
 	{
 		x = 0;
-		while (x < map->width)
+		while (x < game->map->width)
 		{
-			if (map->map[y][x] == '1')
+			if (game->map->map[y * game->map->width + x] == '1')
 				mlx_put_image_to_window(game->mlx, game->win, game->wall_img, x * 32, y * 32);
-			else if (map->map[y][x] == '0')
+			else if (game->map->map[y * game->map->width + x] == '0')
 				mlx_put_image_to_window(game->mlx, game->win, game->wall_img, x * 32, y * 32);
 			x++;
 		}
@@ -44,30 +44,35 @@ void	draw_map(t_map *map, t_game *game)
 
 int	main(int argc, char **argv)
 {
-	t_map	map;
 	t_game	game;
 
+	if (argc != 2)
+		return 1;
 
+	game.map = load_map(argv[1]);
+	if (game.map == NULL)
+		return (ft_free_error(&game, "erreur de map"));
 
+	ft_printf("W: %d, H: %d\n", game.map->width, game.map->height);
+	return 0;
 
 	//initialiser la mz lib
     game.mlx = mlx_init();
     if (game.mlx == NULL)
-		return (ft_free_error(&map, "erreur mlx init"));
+		return (ft_free_error(&game, "erreur mlx init"));
 
 	//ouvrir la fenetre de jeux
     game.win = mlx_new_window(game.mlx, 800, 600, "MLX");
     if (game.mlx == NULL)
-		return (ft_free_error(&map, "erreur game window"));
+		return (ft_free_error(&game, "erreur game window"));
 
 	// charge les images pour le jeux
 	int width;
 	int height;
 	game.background_img = mlx_xpm_file_to_image(game.mlx, "background.xpm", &width, &height);
 	game.wall_img = mlx_xpm_file_to_image(game.mlx, "wall.xpm", &width, &height);
-	printf("background_img %p\nwall_img %p\n", game.background_img, game.wall_img);
 
-	draw_map(&map, &game);
+	draw_map(&game);
 
 	mlx_hook(game.win, 17, 0, (void *)quit, &game);
 	mlx_loop(game.mlx);

@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:19:33 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/03 19:02:40 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/03 19:45:35 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,9 @@
 # define SUCCESS 0
 # define FAILURE 1
 
-/*  Structure a variables */
-typedef struct s_game
-{
-	void	*mlx;
-	void	*win;
-	void	*background_img;
-	void	*wall_img;
-	void	*exit_img;
-	void	*player_img;
-	void	*ennemy_img;
-}			t_game;
-
-/* Check erreur struct */
 typedef struct s_map
 {
-	int		fd;
-	char	**map;
-	char	**map_copy;
+	char	*map;
 	int		width;
 	int		height;
 	int		player_x;
@@ -51,8 +36,21 @@ typedef struct s_map
 	int		coin_count;
 }			t_map;
 
+typedef struct s_game
+{
+	void	*mlx;
+	void	*win;
+	t_map	*map;
+	void	*background_img;
+	void	*wall_img;
+	void	*exit_img;
+	void	*player_img;
+	void	*ennemy_img;
+}			t_game;
+
 /* Fonctions check erreur */
-int	ft_free(t_map *map);
-int	ft_free_error(t_map *map, const char *err_msg);
+int		ft_free(t_game *game);
+int		ft_free_error(t_game *game, const char *error_msg);
+t_map	*load_map(char *filename);
 
 #endif
