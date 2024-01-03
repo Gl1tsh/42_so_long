@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cedmulle <cedmulle@student.42lausanne.c    +#+  +:+       +#+         #
+#    By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/03 19:39:17 by nagiorgi          #+#    #+#              #
-#    Updated: 2024/01/02 12:24:46 by cedmulle         ###   ########.fr        #
+#    Updated: 2024/01/03 20:57:39 by nagiorgi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,18 +43,18 @@ CLEAN = rm -f
 ARC = ar rcs
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 # Règle par défaut pour construire la bibliothèque
 $(NAME): $(OBJS)
-	${ARC} $(NAME) $^
+	@${ARC} $(NAME) $^
 
 all:	$(NAME)
 
 clean:
-	${CLEAN} ${OBJS}
+	@${CLEAN} ${OBJS}
 
 fclean:	clean
-	${CLEAN} ${NAME}
+	@${CLEAN} ${NAME}
 
 re:	fclean	all
