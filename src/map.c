@@ -6,24 +6,16 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/03 20:39:48 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/03 20:47:31 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	get_size(t_map *map, char *filename)
+void	get_width(t_map *map, int fd)
 {
-	int		fd;
 	int		read_count;
-	int		file_size;
 	char	buffer;
-
-	map->width = 0;
-	map->height = 0;
-
-	fd = open(filename, O_RDONLY);
-	// check fd < 0
 
 	// Cherche le premier \n ce qui determine la largeur de la map	
 	while (1)
@@ -35,7 +27,12 @@ void	get_size(t_map *map, char *filename)
 			break;
 		map->width++;
 	}
-	file_size = map->width + 1;
+}
+
+void	get_height(t_map *map, int fd, int file_size)
+{
+	int		read_count;
+	char	buffer;
 
 	// Compte le nombre total de bytes (caracteres) du fichier
 	while (1)
@@ -49,6 +46,20 @@ void	get_size(t_map *map, char *filename)
 
 	// +1 pour ajouter le baque,slache,haine car il n'est pas dans la memoire
 	map->height = file_size / (map->width + 1);
+}
+
+void	get_size(t_map *map, char *filename)
+{
+	int		fd;
+
+	map->width = 0;
+	map->height = 0;
+
+	fd = open(filename, O_RDONLY);
+	// check fd < 0
+
+	get_width(map, fd);
+	get_height(map, fd, map->width + 1);
 
 	close(fd);
 }
