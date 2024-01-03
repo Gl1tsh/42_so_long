@@ -29,3 +29,7 @@ Temporary Items
 obj/
 minilibx/*.o
 libft/*.o
+minilibx/*.a
+libft/*.a
+so_long
+
