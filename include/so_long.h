@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:19:33 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/03 19:45:35 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/03 20:32:07 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,16 @@
 
 typedef struct s_map
 {
-	char	*map;
+	char	*bytes;
 	int		width;
 	int		height;
+	/*
 	int		player_x;
 	int		player_y;
 	int		exit_x;
 	int		exit_y;
 	int		coin_count;
+	*/
 }			t_map;
 
 typedef struct s_game

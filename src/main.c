@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/03 19:45:43 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/03 20:39:52 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void	draw_map(t_game *game)
 		x = 0;
 		while (x < game->map->width)
 		{
-			if (game->map->map[y * game->map->width + x] == '1')
+			if (game->map->bytes[y * game->map->width + x] == '1')
 				mlx_put_image_to_window(game->mlx, game->win, game->wall_img, x * 32, y * 32);
-			else if (game->map->map[y * game->map->width + x] == '0')
-				mlx_put_image_to_window(game->mlx, game->win, game->wall_img, x * 32, y * 32);
+			else if (game->map->bytes[y * game->map->width + x] == '0')
+				mlx_put_image_to_window(game->mlx, game->win, game->background_img, x * 32, y * 32);
 			x++;
 		}
 		y++;
@@ -53,24 +53,21 @@ int	main(int argc, char **argv)
 	if (game.map == NULL)
 		return (ft_free_error(&game, "erreur de map"));
 
-	ft_printf("W: %d, H: %d\n", game.map->width, game.map->height);
-	return 0;
-
 	//initialiser la mz lib
     game.mlx = mlx_init();
     if (game.mlx == NULL)
 		return (ft_free_error(&game, "erreur mlx init"));
 
 	//ouvrir la fenetre de jeux
-    game.win = mlx_new_window(game.mlx, 800, 600, "MLX");
+    game.win = mlx_new_window(game.mlx, game.map->width*32, game.map->height*32, "MLX");
     if (game.mlx == NULL)
 		return (ft_free_error(&game, "erreur game window"));
 
 	// charge les images pour le jeux
 	int width;
 	int height;
-	game.background_img = mlx_xpm_file_to_image(game.mlx, "background.xpm", &width, &height);
-	game.wall_img = mlx_xpm_file_to_image(game.mlx, "wall.xpm", &width, &height);
+	game.background_img = mlx_xpm_file_to_image(game.mlx, "assets/background.xpm", &width, &height);
+	game.wall_img = mlx_xpm_file_to_image(game.mlx, "assets/wall.xpm", &width, &height);
 
 	draw_map(&game);
 

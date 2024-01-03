@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/03 19:46:19 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/03 20:39:48 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,41 @@ void	get_size(t_map *map, char *filename)
 
 	// +1 pour ajouter le baque,slache,haine car il n'est pas dans la memoire
 	map->height = file_size / (map->width + 1);
+
+	close(fd);
 }
 
+void	read_map(t_map *map, char *filename)
+{
+	int		y;
+	int		fd;
+	char	new_line;
+	char	*buffer;
+
+	buffer = map->bytes;
+	fd = open(filename, O_RDONLY);
+
+	y = 0;
+	while (y < map->height)
+	{
+		read(fd, buffer, map->width);
+		read(fd, &new_line, 1);
+		buffer += map->width;
+		y++;
+	}
+
+	close(fd);
+}
 
 t_map *load_map(char *filename)
 {
 	t_map *map = malloc(sizeof(t_map));
 
 	get_size(map, filename);
+
+	map->bytes = malloc(map->width * map->height);
+
+	read_map(map, filename);
 
 	return map;
 }
