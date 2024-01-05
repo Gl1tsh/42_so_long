@@ -19,8 +19,13 @@ void	my_put_image_at(t_game *game, void *image, int x, int y)
 
 void	*my_load_image(t_game *game, char *filename)
 {
-	int width;
-	int height;
+	int	width;
+	int	height;
 
 	return (mlx_xpm_file_to_image(game->mlx, filename, &width, &height));
+}
+
+int	my_coord(t_game *game, int x, int y)
+{
+	return (y * game->map->width + x);
 }
