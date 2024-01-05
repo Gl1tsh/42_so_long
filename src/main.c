@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 12:27:53 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 13:22:24 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 
 #include <stdio.h>
 
+#define KEY_W 119
+#define KEY_S 115
+#define KEY_A 97
+#define KEY_D 100
+
 void quit(t_game *game)
 {
 	mlx_destroy_window(game->mlx, game->win);
 	exit(0);
 }
-
 
 void	draw_map(t_game *game)
 {
@@ -49,6 +53,7 @@ void	draw_map(t_game *game)
 		y++;
 	}
 }
+
 
 int	main(int argc, char **argv)
 {
