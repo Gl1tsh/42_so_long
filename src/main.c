@@ -6,17 +6,11 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 17:50:42 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 19:15:34 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-#include <sys/time.h>
-
-#define KEY_W 119
-#define KEY_S 115
-#define KEY_A 97
-#define KEY_D 100
 
 int quit(t_game *game)
 {
@@ -25,14 +19,52 @@ int quit(t_game *game)
 	return 0;
 }
 
-void	move_player(t_game *game)
+void	move_player(t_game *game, int x, int y)
 {
-	game->map->coin_count++;
+	char	where;
+
+	where = game->map->bytes[(game->map->player_y + y) * game->map->width + (game->map->player_x + x)];
+
+	ft_printf("Coin %d\n", game->map->coin_count);
+	if (where == '0')
+	{
+		mlx_put_image_to_window(game->mlx, game->win, game->background_img, game->map->player_x * 32, game->map->player_y * 32);
+		game->map->player_x += x;
+		game->map->player_y += y;
+		mlx_put_image_to_window(game->mlx, game->win, game->hero_img, game->map->player_x * 32, game->map->player_y * 32);
+	}
+	else if (where == 'C')
+	{
+		game->map->bytes[(game->map->player_y + y) * game->map->width + (game->map->player_x + x)] = '0';
+		game->map->coin_count--;
+		mlx_put_image_to_window(game->mlx, game->win, game->background_img, game->map->player_x * 32, game->map->player_y * 32);
+		game->map->player_x += x;
+		game->map->player_y += y;
+		mlx_put_image_to_window(game->mlx, game->win, game->hero_img, game->map->player_x * 32, game->map->player_y * 32);
+	}
+	else if (where == 'E')
+	{
+		if (game->map->coin_count == 0)
+			quit(game);
+	}
 }
 
-void	draw_player(t_game *game)
+int key_pressed(int keycode, t_game *game)
 {
-	game->map->coin_count++;
+	if (keycode == KEY_ESC)
+	{
+		ft_printf("Merci d'avoir jouer\n");
+		quit(game);
+	}
+	else if (keycode == KEY_W)
+		move_player(game,  0, -1);
+	else if (keycode == KEY_S)
+		move_player(game,  0, 1);
+	else if (keycode == KEY_A)
+		move_player(game,  -1, 0);
+	else if (keycode == KEY_D)
+		move_player(game,  1, 0);
+	return 0;
 }
 
 void	draw_map(t_game *game)
@@ -52,8 +84,6 @@ void	draw_map(t_game *game)
 				mlx_put_image_to_window(game->mlx, game->win, game->background_img, x * 32, y * 32);
 			else if (game->map->bytes[y * game->map->width + x] == 'C')
 				mlx_put_image_to_window(game->mlx, game->win, game->key_img, x * 32, y * 32);
-			else if (game->map->bytes[y * game->map->width + x] == 'P')
-				mlx_put_image_to_window(game->mlx, game->win, game->hero_img, x * 32, y * 32);
 			else if (game->map->bytes[y * game->map->width + x] == 'E')
 				mlx_put_image_to_window(game->mlx, game->win, game->exit_img, x * 32, y * 32);
 			x++;
@@ -100,8 +130,10 @@ int	main(int argc, char **argv)
 	ft_printf("le jeux ce lance dans ... ba maintenant\n");
 
 	draw_map(&game);
+	mlx_put_image_to_window(game.mlx, game.win, game.hero_img, game.map->player_x * 32, game.map->player_y * 32);
 
 	mlx_hook(game.win, 17, 0, (void *)quit, &game);
+	mlx_key_hook(game.win, key_pressed, &game);
 	mlx_loop(game.mlx);
 	return (FAILURE);
 }

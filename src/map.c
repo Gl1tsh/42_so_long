@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 17:22:23 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 19:00:07 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	read_map(t_map *map, char *filename)
 
 t_map *load_map(char *filename)
 {
+	int	i;
 	t_map *map = malloc(sizeof(t_map));
 
 	get_size(map, filename);
@@ -95,6 +96,23 @@ t_map *load_map(char *filename)
 	map->bytes = malloc(map->width * map->height);
 
 	read_map(map, filename);
+
+	i = 0;
+	map->coin_count = 0;
+	while (i < map->width * map->height)
+	{
+		if (map->bytes[i] == 'C')
+			map->coin_count++;
+		i++;
+	}
+
+	char *player_position = ft_memchr(map->bytes, 'P', map->width * map->height);
+	if (player_position == NULL)
+		exit(3);
+
+	*player_position = '0';
+	map->player_y = (player_position - map->bytes) / map->width;
+	map->player_x = (player_position - map->bytes) % map->width;
 
 	return map;
 }
