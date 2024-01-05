@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 17:19:35 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:50:42 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,44 +54,12 @@ void	draw_map(t_game *game)
 				mlx_put_image_to_window(game->mlx, game->win, game->key_img, x * 32, y * 32);
 			else if (game->map->bytes[y * game->map->width + x] == 'P')
 				mlx_put_image_to_window(game->mlx, game->win, game->hero_img, x * 32, y * 32);
-			else if (game->map->bytes[y * game->map->width + x] == 'x')
-				mlx_put_image_to_window(game->mlx, game->win, game->zombie_img, x * 32, y * 32);
 			else if (game->map->bytes[y * game->map->width + x] == 'E')
 				mlx_put_image_to_window(game->mlx, game->win, game->exit_img, x * 32, y * 32);
 			x++;
 		}
 		y++;
 	}
-}
-
-long long	get_milli_time()
-{
-	struct timeval	timeval;
-	long long		millitime;
-
-	gettimeofday(&timeval, NULL);
-	millitime = timeval.tv_sec * 1000LL + timeval.tv_usec / 1000;
-	return (millitime);
-}
-
-int	game_loop(t_game *game)
-{
-	long long now;
-
-	now = get_milli_time();
-	if (now - game->last_tick > 160)
-	{
-		// update
-		move_player(game);
-
-		// draw
-		mlx_clear_window(game->mlx, game->win);
-		draw_map(game);
-		draw_player(game);
-
-		game->last_tick = now;
-	}
-	return 1;
 }
 
 //#include <stdio.h>
@@ -126,16 +94,14 @@ int	main(int argc, char **argv)
 	game.wall_img = mlx_xpm_file_to_image(game.mlx, "assets/wall.xpm", &width, &height);
 	game.key_img = mlx_xpm_file_to_image(game.mlx, "assets/key.xpm", &width, &height);
 	game.hero_img = mlx_xpm_file_to_image(game.mlx, "assets/hero.xpm", &width, &height);
-	game.zombie_img = mlx_xpm_file_to_image(game.mlx, "assets/zombie.xpm", &width, &height);
 	game.exit_img = mlx_xpm_file_to_image(game.mlx, "assets/exit.xpm", &width, &height);
 	ft_printf("game image load : ok\n");
 
 	ft_printf("le jeux ce lance dans ... ba maintenant\n");
 
-//	draw_map(&game);
+	draw_map(&game);
 
 	mlx_hook(game.win, 17, 0, (void *)quit, &game);
-	mlx_loop_hook(game.win, (void *)game_loop, &game);
 	mlx_loop(game.mlx);
 	return (FAILURE);
 }
