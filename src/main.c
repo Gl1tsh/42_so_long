@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/03 20:58:42 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 12:27:53 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,14 @@ void	draw_map(t_game *game)
 				mlx_put_image_to_window(game->mlx, game->win, game->wall_img, x * 32, y * 32);
 			else if (game->map->bytes[y * game->map->width + x] == '0')
 				mlx_put_image_to_window(game->mlx, game->win, game->background_img, x * 32, y * 32);
+			else if (game->map->bytes[y * game->map->width + x] == 'C')
+				mlx_put_image_to_window(game->mlx, game->win, game->key_img, x * 32, y * 32);
+			else if (game->map->bytes[y * game->map->width + x] == 'P')
+				mlx_put_image_to_window(game->mlx, game->win, game->hero_img, x * 32, y * 32);
+			else if (game->map->bytes[y * game->map->width + x] == 'x')
+				mlx_put_image_to_window(game->mlx, game->win, game->zombie_img, x * 32, y * 32);
+			else if (game->map->bytes[y * game->map->width + x] == 'E')
+				mlx_put_image_to_window(game->mlx, game->win, game->exit_img, x * 32, y * 32);
 			x++;
 		}
 		y++;
@@ -68,6 +76,10 @@ int	main(int argc, char **argv)
 	int height;
 	game.background_img = mlx_xpm_file_to_image(game.mlx, "assets/background.xpm", &width, &height);
 	game.wall_img = mlx_xpm_file_to_image(game.mlx, "assets/wall.xpm", &width, &height);
+	game.key_img = mlx_xpm_file_to_image(game.mlx, "assets/key.xpm", &width, &height);
+	game.hero_img = mlx_xpm_file_to_image(game.mlx, "assets/hero.xpm", &width, &height);
+	game.zombie_img = mlx_xpm_file_to_image(game.mlx, "assets/zombie.xpm", &width, &height);
+	game.exit_img = mlx_xpm_file_to_image(game.mlx, "assets/exit.xpm", &width, &height);
 
 	draw_map(&game);
 
