@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 20:19:18 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 20:42:12 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ t_map	*load_map(char *filename)
 	t_map	*map;
 	char	*player_position;
 
-	map = malloc(sizeof(t_map));
+	map = ft_calloc(sizeof(t_map), 1);
 	get_size(map, filename);
-	map->bytes = malloc(map->width * map->height);
+	map->bytes = ft_calloc(map->width, map->height);
 	read_map(map, filename);
 	i = 0;
 	map->coin_count = 0;
