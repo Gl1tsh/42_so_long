@@ -6,23 +6,33 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 13:22:24 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:19:35 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-#include <stdio.h>
+#include <sys/time.h>
 
 #define KEY_W 119
 #define KEY_S 115
 #define KEY_A 97
 #define KEY_D 100
 
-void quit(t_game *game)
+int quit(t_game *game)
 {
 	mlx_destroy_window(game->mlx, game->win);
 	exit(0);
+	return 0;
+}
+
+void	move_player(t_game *game)
+{
+	game->map->coin_count++;
+}
+
+void	draw_player(t_game *game)
+{
+	game->map->coin_count++;
 }
 
 void	draw_map(t_game *game)
@@ -54,7 +64,37 @@ void	draw_map(t_game *game)
 	}
 }
 
+long long	get_milli_time()
+{
+	struct timeval	timeval;
+	long long		millitime;
 
+	gettimeofday(&timeval, NULL);
+	millitime = timeval.tv_sec * 1000LL + timeval.tv_usec / 1000;
+	return (millitime);
+}
+
+int	game_loop(t_game *game)
+{
+	long long now;
+
+	now = get_milli_time();
+	if (now - game->last_tick > 160)
+	{
+		// update
+		move_player(game);
+
+		// draw
+		mlx_clear_window(game->mlx, game->win);
+		draw_map(game);
+		draw_player(game);
+
+		game->last_tick = now;
+	}
+	return 1;
+}
+
+//#include <stdio.h>
 int	main(int argc, char **argv)
 {
 	t_game	game;
@@ -65,16 +105,19 @@ int	main(int argc, char **argv)
 	game.map = load_map(argv[1]);
 	if (game.map == NULL)
 		return (ft_free_error(&game, "erreur de map"));
+	ft_printf("load map : ok\n");
 
 	//initialiser la mz lib
     game.mlx = mlx_init();
     if (game.mlx == NULL)
 		return (ft_free_error(&game, "erreur mlx init"));
+	ft_printf("mlx init : ok\n");
 
 	//ouvrir la fenetre de jeux
     game.win = mlx_new_window(game.mlx, game.map->width*32, game.map->height*32, "MLX");
     if (game.mlx == NULL)
 		return (ft_free_error(&game, "erreur game window"));
+	ft_printf("game windows : ok\n");
 
 	// charge les images pour le jeux
 	int width;
@@ -85,63 +128,14 @@ int	main(int argc, char **argv)
 	game.hero_img = mlx_xpm_file_to_image(game.mlx, "assets/hero.xpm", &width, &height);
 	game.zombie_img = mlx_xpm_file_to_image(game.mlx, "assets/zombie.xpm", &width, &height);
 	game.exit_img = mlx_xpm_file_to_image(game.mlx, "assets/exit.xpm", &width, &height);
+	ft_printf("game image load : ok\n");
 
-	draw_map(&game);
+	ft_printf("le jeux ce lance dans ... ba maintenant\n");
+
+//	draw_map(&game);
 
 	mlx_hook(game.win, 17, 0, (void *)quit, &game);
+	mlx_loop_hook(game.win, (void *)game_loop, &game);
 	mlx_loop(game.mlx);
 	return (FAILURE);
-
-	//debug_mode(&map_info);
-	// lancer le jeu
-	// liberer toutes les donnees et fermer proprement
 }
-
-
-
-
-
-
-
-
-// static void debug_mode(t_map *map)
-// {
-// 	printf("map:\n");
-// 	for (int i = 0; i < map->map_hauteur; i++) {
-// 		printf("%s\n", map->map[i]);
-// 	}
-// 	printf("map_copy:\n");
-// 	for (int i = 0; i < map->map_hauteur; i++) {
-// 		printf("%s\n", map->map_copy[i]);
-// 	}
-// 	printf("map_hauteur: %d\n", map->map_hauteur);
-// 	printf("map_largeur: %d\n", map->map_largeur);
-// 	printf("player_x: %d\n", map->player_x);
-// 	printf("player_y: %d\n", map->player_y);
-// 	printf("exit_x: %d\n", map->exit_x);
-// 	printf("exit_y: %d\n", map->exit_y);
-// 	printf("nbr_coin: %d\n", map->nbr_coin);
-// 	return ;
-// }
-
-/* test open windows
-int main()
-{
-	void	*mlx;
-	void	*mlx_win;
-
-	t_info	img;
-
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 800, 500, "Hello World!");
-
-	img.img = mlx_new_image(mlx, 800, 500);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_lenght, &img.endian);
-
-	my_mlx_pixel_put(&img, 5, 5, 0x00FF0000);
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-
-	mlx_loop(mlx);
-
-}
-*/

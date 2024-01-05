@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/03 20:47:31 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 15:42:15 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,3 @@ t_map *load_map(char *filename)
 
 	return map;
 }
-

@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:19:33 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 13:23:01 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 16:34:23 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,21 +43,21 @@ typedef struct s_map
 
 typedef struct s_game
 {
-	void	*mlx;
-	void	*win;
-	t_map	*map;
-	void	*background_img;
-	void	*wall_img;
-	void	*key_img;
-	void	*exit_img;
-	void	*hero_img;
-	void	*zombie_img;
+	void		*mlx;
+	void		*win;
+	t_map		*map;
+	void		*background_img;
+	void		*wall_img;
+	void		*key_img;
+	void		*exit_img;
+	void		*hero_img;
+	void		*zombie_img;
+	long long	last_tick;
 }			t_game;
 
 /* Fonctions check erreur */
 int		ft_free(t_game *game);
 int		ft_free_error(t_game *game, const char *error_msg);
 t_map	*load_map(char *filename);
-int		player_move(int keycode, t_map *map);
 
 #endif
