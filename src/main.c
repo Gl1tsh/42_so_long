@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 20:30:13 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 20:39:41 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,19 +98,19 @@ int	main(int argc, char **argv)
 	game.move_count = 0;
 	game.map = load_map(argv[1]);
 	if (game.map == NULL)
-		return (game_quit_error(&game, "erreur de map"));
+		game_quit_error(&game, "erreur de map");
 	game.mlx = mlx_init();
 	if (game.mlx == NULL)
-		return (game_quit_error(&game, "erreur mlx init"));
+		game_quit_error(&game, "erreur mlx init");
 	game.win = mlx_new_window(game.mlx, game.map->width * 32,
 			game.map->height * 32, "so_long");
 	if (game.win == NULL)
-		return (game_quit_error(&game, "erreur game window"));
+		game_quit_error(&game, "erreur game window");
 	load_images(&game);
 	draw_map(&game);
 	my_put_image_at(&game, game.hero_img, game.map->player_x,
 		game.map->player_y);
-	mlx_hook(game.win, 17, 0, game_quit, &game);
+	mlx_hook(game.win, 17, 0, (void *)game_quit, &game);
 	mlx_key_hook(game.win, key_pressed, &game);
 	mlx_loop(game.mlx);
 	return (FAILURE);

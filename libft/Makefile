@@ -6,12 +6,14 @@
 #    By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/03 19:39:17 by nagiorgi          #+#    #+#              #
-#    Updated: 2024/01/05 18:15:50 by nagiorgi         ###   ########.fr        #
+#    Updated: 2024/01/05 20:38:11 by nagiorgi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Liste des fichiers source
-SRCS = 	ft_memchr.c \
+SRCS = 	ft_bzero.c \
+		ft_calloc.c \
+		ft_memchr.c \
 		ft_strlen.c \
 		ft_strdup.c \
 		ft_strtrim.c \
