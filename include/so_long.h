@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:19:33 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 18:06:44 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 19:22:51 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_game
 	void	*key_img;
 	void	*exit_img;
 	void	*hero_img;
+	int		move_count;
 }			t_game;
 
 /* Fonctions check erreur */

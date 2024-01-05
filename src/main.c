@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 19:15:34 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 19:25:15 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	move_player(t_game *game, int x, int y)
 
 	where = game->map->bytes[(game->map->player_y + y) * game->map->width + (game->map->player_x + x)];
 
-	ft_printf("Coin %d\n", game->map->coin_count);
 	if (where == '0')
 	{
 		mlx_put_image_to_window(game->mlx, game->win, game->background_img, game->map->player_x * 32, game->map->player_y * 32);
@@ -47,6 +46,8 @@ void	move_player(t_game *game, int x, int y)
 		if (game->map->coin_count == 0)
 			quit(game);
 	}
+	game->move_count++;
+	ft_printf("move : %d\n", game->move_count);
 }
 
 int key_pressed(int keycode, t_game *game)
@@ -100,22 +101,20 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		return 1;
 
+	game.move_count = 0;
 	game.map = load_map(argv[1]);
 	if (game.map == NULL)
 		return (ft_free_error(&game, "erreur de map"));
-	ft_printf("load map : ok\n");
 
 	//initialiser la mz lib
     game.mlx = mlx_init();
     if (game.mlx == NULL)
 		return (ft_free_error(&game, "erreur mlx init"));
-	ft_printf("mlx init : ok\n");
 
 	//ouvrir la fenetre de jeux
     game.win = mlx_new_window(game.mlx, game.map->width*32, game.map->height*32, "MLX");
     if (game.mlx == NULL)
 		return (ft_free_error(&game, "erreur game window"));
-	ft_printf("game windows : ok\n");
 
 	// charge les images pour le jeux
 	int width;
@@ -125,9 +124,6 @@ int	main(int argc, char **argv)
 	game.key_img = mlx_xpm_file_to_image(game.mlx, "assets/key.xpm", &width, &height);
 	game.hero_img = mlx_xpm_file_to_image(game.mlx, "assets/hero.xpm", &width, &height);
 	game.exit_img = mlx_xpm_file_to_image(game.mlx, "assets/exit.xpm", &width, &height);
-	ft_printf("game image load : ok\n");
-
-	ft_printf("le jeux ce lance dans ... ba maintenant\n");
 
 	draw_map(&game);
 	mlx_put_image_to_window(game.mlx, game.win, game.hero_img, game.map->player_x * 32, game.map->player_y * 32);
