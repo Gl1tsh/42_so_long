@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:19:33 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 20:19:56 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 20:33:20 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ typedef struct s_game
 	int		move_count;
 }			t_game;
 
-int		ft_free(t_game *game);
-int		ft_free_error(t_game *game, const char *error_msg);
+void	game_quit(t_game *game);
+void	game_quit_error(t_game *game, const char *error_msg);
 t_map	*load_map(char *filename);
 
 void	my_put_image_at(t_game *game, void *image, int x, int y);

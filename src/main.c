@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 20:23:20 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/05 20:30:13 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,6 @@ void	load_images(t_game *game)
 	game->key_img = my_load_image(game, "assets/key.xpm");
 	game->hero_img = my_load_image(game, "assets/hero.xpm");
 	game->exit_img = my_load_image(game, "assets/exit.xpm");
-}
-
-int	quit(t_game *game)
-{
-	mlx_destroy_window(game->mlx, game->win);
-	exit(0);
-	return (0);
 }
 
 void	move_player(t_game *game, int x, int y)
@@ -51,7 +44,7 @@ void	move_player(t_game *game, int x, int y)
 	}
 	if (where == 'E')
 		if (game->map->coin_count == 0)
-			quit(game);
+			game_quit(game);
 	game->move_count++;
 	ft_printf("move : %d\n", game->move_count);
 }
@@ -59,7 +52,7 @@ void	move_player(t_game *game, int x, int y)
 int	key_pressed(int keycode, t_game *game)
 {
 	if (keycode == KEY_ESC)
-		quit(game);
+		game_quit(game);
 	else if (keycode == KEY_W)
 		move_player(game, 0, -1);
 	else if (keycode == KEY_S)
@@ -105,19 +98,19 @@ int	main(int argc, char **argv)
 	game.move_count = 0;
 	game.map = load_map(argv[1]);
 	if (game.map == NULL)
-		return (ft_free_error(&game, "erreur de map"));
+		return (game_quit_error(&game, "erreur de map"));
 	game.mlx = mlx_init();
 	if (game.mlx == NULL)
-		return (ft_free_error(&game, "erreur mlx init"));
+		return (game_quit_error(&game, "erreur mlx init"));
 	game.win = mlx_new_window(game.mlx, game.map->width * 32,
 			game.map->height * 32, "so_long");
 	if (game.win == NULL)
-		return (ft_free_error(&game, "erreur game window"));
+		return (game_quit_error(&game, "erreur game window"));
 	load_images(&game);
 	draw_map(&game);
 	my_put_image_at(&game, game.hero_img, game.map->player_x,
 		game.map->player_y);
-	mlx_hook(game.win, 17, 0, (void *)quit, &game);
+	mlx_hook(game.win, 17, 0, game_quit, &game);
 	mlx_key_hook(game.win, key_pressed, &game);
 	mlx_loop(game.mlx);
 	return (FAILURE);
