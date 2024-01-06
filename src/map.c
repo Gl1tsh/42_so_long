@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/06 16:22:33 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 16:40:01 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,10 +166,41 @@ void	check_pec(t_map *map)
 		map_quit(map, "Too much or no exit on the map");
 }
 
+void	flood_fill(t_map *map, char *copy, int x, int y)
+{
+	if (x < 0 || x >= map->width || y < 0 || y >= map->height)
+		return ;
+	if (copy[y * map->width + x] != '0'
+		&& copy[y * map->width + x] != 'C'
+		&& copy[y * map->width + x] != 'E')
+		return ;
+	copy[y * map->width + x] = '*';
+	flood_fill(map, copy, x, y - 1);
+	flood_fill(map, copy, x, y + 1);
+	flood_fill(map, copy, x - 1, y);
+	flood_fill(map, copy, x + 1, y);
+}
+
+void	check_path(t_map *map)
+{
+	char	*copy;
+	int		exit_filled;
+
+	copy = malloc(map->width * map->height);
+	if (copy == NULL)
+		map_quit(map, "Can't allocate map copy");
+	ft_memcpy(copy, map->bytes, map->width * map->height);
+	flood_fill(map, copy, map->player_x, map->player_y);
+	exit_filled = copy[map->exit_y * map->width + map->exit_x] == '*';
+	free(copy);
+	if (!exit_filled)
+		map_quit(map, "No exit possible on the map");
+}
+
 t_map	*load_map(char *filename)
 {
 	t_map	*map;
-	char	*player_position;
+	char	*p_e_position;
 
 	map = ft_calloc(sizeof(t_map), 1);
 	if (map == NULL)
@@ -183,9 +214,13 @@ t_map	*load_map(char *filename)
 	check_pec(map);
 	if (map->coin_count < 1)
 		map_quit(map, "No keys on the map");
-	player_position = ft_memchr(map->bytes, 'P', map->width * map->height);
-	*player_position = '0';
-	map->player_y = (player_position - map->bytes) / map->width;
-	map->player_x = (player_position - map->bytes) % map->width;
+	p_e_position = ft_memchr(map->bytes, 'P', map->width * map->height);
+	*p_e_position = '0';
+	map->player_y = (p_e_position - map->bytes) / map->width;
+	map->player_x = (p_e_position - map->bytes) % map->width;
+	p_e_position = ft_memchr(map->bytes, 'E', map->width * map->height);
+	map->exit_y = (p_e_position - map->bytes) / map->width;
+	map->exit_x = (p_e_position - map->bytes) % map->width;
+	check_path(map);
 	return (map);
 }
