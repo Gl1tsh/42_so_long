@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:22:50 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 20:51:49 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 14:01:47 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ void	move_player(t_game *game, int x, int y)
 		game->map->player_y += y;
 		my_put_image_at(game, game->hero_img,
 			game->map->player_x, game->map->player_y);
+		game->move_count++;
+		ft_printf("\033[0;32mmove : %d\n", game->move_count);
 	}
 	if (where == 'E')
 		if (game->map->coin_count == 0)
 			game_quit(game);
-	game->move_count++;
-	ft_printf("move : %d\n", game->move_count);
 }
 
 int	key_pressed(int keycode, t_game *game)
