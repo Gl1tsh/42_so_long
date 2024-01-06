@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:19:33 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/06 14:15:06 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 15:57:21 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,7 @@ void	*my_load_image(t_game *game, char *filename);
 int		my_coord(t_game *game, int x, int y);
 
 void	map_quit(t_map *map, const char *error_msg);
+void	check_borders(t_map *map);
+void	check_pec(t_map *map);
 
 #endif

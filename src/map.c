@@ -6,12 +6,18 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/06 14:43:20 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 16:22:33 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
+/*
+ * La fonction `get_width` calcule la largeur de la carte. Elle lit les
+ * caractères du fichier jusqu'à rencontrer un '\n'. Pour chaque caractère
+ * qui n'est pas un '\n', elle incrémente `width` dans `map`. En cas d'erreur
+ * de lecture, elle appelle `map_quit` avec le message d'erreur correspondant.
+ */
 void	get_width(t_map *map, int fd)
 {
 	int		read_count;
@@ -28,6 +34,12 @@ void	get_width(t_map *map, int fd)
 	}
 }
 
+/*
+ * La fonction `get_height` calcule la hauteur de la carte. Elle lit les
+ * caractères du fichier jusqu'à rencontrer un EOF (fin de fichier). Pour
+ * chaque '\n' rencontré, elle incrémente `height` dans `map`. En cas d'erreur
+ * de lecture, elle appelle `map_quit` avec le message d'erreur correspondant.
+ */
 void	get_height(t_map *map, int fd, int file_size)
 {
 	int		read_count;
@@ -49,6 +61,13 @@ void	get_height(t_map *map, int fd, int file_size)
 	map->height = file_size / (map->width + 1);
 }
 
+/*
+ * La fonction `get_size` calcule la largeur et la hauteur de la carte.
+ * Elle ouvre le fichier en lecture seule, puis appelle `get_width` et
+ * `get_height` pour déterminer les dimensions de la carte. En cas d'erreur
+ * lors de l'ouverture du fichier, elle appelle `map_quit` avec le message
+ * d'erreur correspondant.
+ */
 void	get_size(t_map *map, char *filename)
 {
 	int		fd;
@@ -63,6 +82,13 @@ void	get_size(t_map *map, char *filename)
 	close(fd);
 }
 
+/*
+ * La fonction `read_map` lit le contenu de la carte à partir du fichier.
+ * Elle ouvre le fichier en lecture seule, puis lit chaque ligne de la carte
+ * dans le tampon `bytes` de la structure `map`. Si la lecture d'une ligne
+ * échoue ou si la lecture du caractère de nouvelle ligne échoue, elle appelle
+ * `map_quit` avec le message d'erreur correspondant.
+ */
 void	read_map(t_map *map, char *filename)
 {
 	int		y;
@@ -87,9 +113,61 @@ void	read_map(t_map *map, char *filename)
 	close(fd);
 }
 
+void	check_borders(t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (i < map->width)
+	{
+		if (map->bytes[0 * map->width + i] != '1')
+			map_quit(map, "top border is not a wall on the map");
+		if (map->bytes[(map->height - 1) * map->width + i] != '1')
+			map_quit(map, "bottom border is not a wall on the map");
+		i++;
+	}
+	i = 0;
+	while (i < map->height)
+	{
+		if (map->bytes[i * map->width + 0] != '1')
+			map_quit(map, "left is not a wall on the map");
+		if (map->bytes[i * map->width + (map->width - 1)] != '1')
+			map_quit(map, "right is not a wall on the map");
+		i++;
+	}
+}
+
+void	check_pec(t_map *map)
+{
+	int	i;
+	int	player_count;
+	int	exit_count;
+
+	i = 0;
+	player_count = 0;
+	exit_count = 0;
+	while (i < map->width * map->height)
+	{
+		if (map->bytes[i] != 'P' && map->bytes[i] != 'C'
+			&& map->bytes[i] != 'E' && map->bytes[i] != '1'
+			&& map->bytes[i] != '0')
+			map_quit(map, "invalid items on the map");
+		if (map->bytes[i] == 'P')
+			player_count++;
+		if (map->bytes[i] == 'E')
+			exit_count++;
+		if (map->bytes[i] == 'C')
+			map->coin_count++;
+		i++;
+	}
+	if (player_count != 1)
+		map_quit(map, "Too much or no player on the map");
+	if (exit_count != 1)
+		map_quit(map, "Too much or no exit on the map");
+}
+
 t_map	*load_map(char *filename)
 {
-	int		i;
 	t_map	*map;
 	char	*player_position;
 
@@ -101,17 +179,11 @@ t_map	*load_map(char *filename)
 	if (map->bytes == NULL)
 		map_quit(map, "load_map bytes allocated error");
 	read_map(map, filename);
-	i = 0;
-	map->coin_count = 0;
-	while (i < map->width * map->height)
-	{
-		if (map->bytes[i] == 'C')
-			map->coin_count++;
-		i++;
-	}
+	check_borders(map);
+	check_pec(map);
+	if (map->coin_count < 1)
+		map_quit(map, "No keys on the map");
 	player_position = ft_memchr(map->bytes, 'P', map->width * map->height);
-	if (player_position == NULL)
-		exit(3);
 	*player_position = '0';
 	map->player_y = (player_position - map->bytes) / map->width;
 	map->player_x = (player_position - map->bytes) % map->width;
