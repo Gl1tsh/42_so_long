@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 15:54:13 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/06 14:03:51 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 18:04:12 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ void	game_free(t_game *game)
 		mlx_destroy_image(game->mlx, game->key_img);
 	if (game->exit_img != NULL)
 		mlx_destroy_image(game->mlx, game->exit_img);
-	if (game != NULL)
-		free(game->map);
+	if (game->map)
+		free(game->map->bytes);
+	free(game->map);
 }
 
 void	game_quit(t_game *game)
