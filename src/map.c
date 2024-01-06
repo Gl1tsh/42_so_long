@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 20:42:12 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 14:22:07 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	get_width(t_map *map, int fd)
 	while (1)
 	{
 		read_count = read(fd, &buffer, 1);
+		if (read_count < 0)
+			map_quit(map, strerror(errno));
 		if (buffer == '\n')
 			break ;
 		map->width++;
@@ -34,6 +36,8 @@ void	get_height(t_map *map, int fd, int file_size)
 	while (1)
 	{
 		read_count = read(fd, &buffer, 1);
+		if (read_count < 0)
+			map_quit(map, strerror(errno));
 		if (read_count == 0)
 			break ;
 		file_size++;
@@ -48,6 +52,8 @@ void	get_size(t_map *map, char *filename)
 	map->width = 0;
 	map->height = 0;
 	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		map_quit(map, strerror(errno));
 	get_width(map, fd);
 	get_height(map, fd, map->width + 1);
 	close(fd);
@@ -62,11 +68,15 @@ void	read_map(t_map *map, char *filename)
 
 	buffer = map->bytes;
 	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		map_quit(map, strerror(errno));
 	y = 0;
 	while (y < map->height)
 	{
-		read(fd, buffer, map->width);
-		read(fd, &new_line, 1);
+		if (read(fd, buffer, map->width) != map->width)
+			map_quit(map, strerror(errno));
+		if (read(fd, &new_line, 1) < 0)
+			map_quit(map, strerror(errno));
 		buffer += map->width;
 		y++;
 	}
@@ -80,8 +90,12 @@ t_map	*load_map(char *filename)
 	char	*player_position;
 
 	map = ft_calloc(sizeof(t_map), 1);
+	if (map == NULL)
+		return (NULL);
 	get_size(map, filename);
 	map->bytes = ft_calloc(map->width, map->height);
+	if (map->bytes == NULL)
+		map_quit(map, "load_map bytes allocated error");
 	read_map(map, filename);
 	i = 0;
 	map->coin_count = 0;

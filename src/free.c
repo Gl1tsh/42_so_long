@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 15:54:13 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 20:51:39 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 14:03:51 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ void	game_quit(t_game *game)
 void	game_quit_error(t_game *game, const char *error_msg)
 {
 	game_free(game);
+	ft_printf("Error: %s\n", error_msg);
+	exit(EXIT_FAILURE);
+}
+
+void	map_quit(t_map *map, const char *error_msg)
+{
+	free(map->bytes);
+	free(map);
 	ft_printf("Error: %s\n", error_msg);
 	exit(EXIT_FAILURE);
 }

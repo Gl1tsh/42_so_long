@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 07:19:33 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/05 20:33:20 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 14:15:06 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/errno.h>
 
 # define SUCCESS 0
 # define FAILURE 1
@@ -62,5 +63,7 @@ t_map	*load_map(char *filename);
 void	my_put_image_at(t_game *game, void *image, int x, int y);
 void	*my_load_image(t_game *game, char *filename);
 int		my_coord(t_game *game, int x, int y);
+
+void	map_quit(t_map *map, const char *error_msg);
 
 #endif
