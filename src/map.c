@@ -6,7 +6,7 @@
 /*   By: nagiorgi <nagiorgi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 19:20:10 by nagiorgi          #+#    #+#             */
-/*   Updated: 2024/01/06 14:22:07 by nagiorgi         ###   ########.fr       */
+/*   Updated: 2024/01/06 14:43:20 by nagiorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ void	get_height(t_map *map, int fd, int file_size)
 			break ;
 		file_size++;
 	}
+	if (file_size % (map->width + 1) == map->width)
+		file_size++;
+	if (file_size % (map->width + 1) != 0)
+		map_quit(map, "map not rectangularisalisation please");
 	map->height = file_size / (map->width + 1);
 }
 
