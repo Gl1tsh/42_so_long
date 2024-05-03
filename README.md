@@ -1,4 +1,8 @@
 # SO_LONG
+<p align="center">
+  <img width="668" alt="so_long_img" src="https://github.com/Gl1tsh/42_so_long/assets/69108289/71519126-8633-4144-aff3-bd73004331e0">
+</p>
+
 
 The So_Long project at 42 school is an introductory project that focuses on creating a simple 2D game using the MinilibX graphic library. The objective of the game is to collect all required items and reach the exit while avoiding obstacles.
 
