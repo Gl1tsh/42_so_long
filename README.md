@@ -21,3 +21,26 @@ This project introduces students to several key concepts in game development and
 - *Memory Management*: Proper memory allocation and deallocation are crucial to avoid memory leaks and ensure the efficient use of system resources.
 
 In summary, the So_Long project provides students with hands-on experience in game development and graphics programming using the MinilibX library. It allows them to apply their knowledge of C programming and learn fundamental concepts in game design while creating a simple 2D game.
+
+# How to launch the game :
+
+## First step
+- You need to clone the repository with the following command in the terminal: 
+
+```git clone https://github.com/Gl1tsh/42_so_long.git```
+
+- Now you need to enter the folder of the clone you've made
+
+## Start the game
+
+- Run the command: ```make```
+- Once compiled, launch the game with a valid map: ```./so_long map/<map of your choice>```
+- Exemple, you can copy past this : ```./so_long map/map1.ber```
+- You have to collect all the pieces to be able to exit.
+
+## Mouvement
+| Commands                  | Move                            |
+|---------------------------|---------------------------------|
+| `W`/`A`/`S`/`D`           | front/left/down/right           |
+
+## Enjoy
