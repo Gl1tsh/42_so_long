@@ -37,6 +37,7 @@ In summary, the So_Long project provides students with hands-on experience in ga
 - Once compiled, launch the game with a valid map: ```./so_long map/<map of your choice>```
 - Exemple, you can copy past this : ```./so_long map/map1.ber```
 - You have to collect all the pieces to be able to exit.
+- To exit the game at any time, simply press ```esc``` key
 
 ## Mouvement
 | Commands                  | Move                            |
